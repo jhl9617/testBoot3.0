@@ -16,8 +16,14 @@ public class GreetingController {
     }
 
     @GetMapping("/api/data")
-    public String sendData() {
-        return "Hello World from restAPI";
+    public String sendData(@RequestParam(name="qwe", required=false, defaultValue="BoOot") String name) {
+        return name;
     }
+
+//    @GetMapping("/api/data")
+//    public String sendData() {
+//        return "Hello World from restAPI";
+//    }
+
 
 }
