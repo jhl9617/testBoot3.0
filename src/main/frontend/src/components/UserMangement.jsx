@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getUsers } from "../api";
-
+import { getUsers } from "../services/userApi";
+import UserEditModal from "./modals/UserEditModal";
 import { useLoaderData } from "react-router-dom";
 
 export const usersLoader = async () => {
@@ -11,23 +11,13 @@ export const usersLoader = async () => {
 };
 
 const UserMangement = () => {
-
   const { users } = useLoaderData();
   const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedUserData, setSelectedUserData] = useState(null);
+  const [showModal, setShowModal] = useState(false); // 모달의 보이기/숨기기 상태
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      console.log("요청");
-      try {
-        // const response = await axios.get("api/v1/users/");
-        // console.log(response.data);
-        // setUsers(response.data);
-      } catch (err) {
-        console.log("에러: ", err);
-      }
-    };
-    fetchUsers();
     setLoading(false);
   }, []);
 
@@ -36,6 +26,7 @@ const UserMangement = () => {
     //id row의 색깔을 바꾸고 싶다.
 
     console.log("Selected row id:", id);
+
     setSelectedRow(id);
   };
 
@@ -43,7 +34,8 @@ const UserMangement = () => {
   const performActionOnSelected = () => {
     if (selectedRow !== null) {
       console.log("Performing action on selected row:", selectedRow);
-      // Add the action you want to perform here
+
+      setShowModal(true);
     }
   };
 
@@ -55,13 +47,19 @@ const UserMangement = () => {
         className="btn btn-primary mb-3"
         onClick={performActionOnSelected}
       >
-        액션
+        수정
       </button>
-
+      {showModal && (
+        <UserEditModal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          userData={selectedUserData}
+        />
+      )}
       <table className="table table-hover">
         <thead>
           <tr>
-            <th>Select</th>
+            <th></th>
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
@@ -75,7 +73,10 @@ const UserMangement = () => {
             <tr
               key={index}
               className={selectedRow === user.id ? "selected" : ""}
-              onClick={() => selectRow(user.id)}
+              onClick={() => {
+                selectRow(user.id);
+                setSelectedUserData(user);
+              }}
             >
               <td>
                 <input

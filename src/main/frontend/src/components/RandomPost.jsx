@@ -2,7 +2,7 @@
 import { Suspense } from "react";
 import { defer, useLoaderData, Await } from "react-router-dom";
 
-import { getCommentsByPostId, getPostById } from "../api";
+import { getCommentsByPostId, getPostById } from "../services/userApi";
 
 export const postLoader = async ({ params }) => {
   const postId = params.postId;

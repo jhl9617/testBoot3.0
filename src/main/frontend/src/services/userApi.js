@@ -23,3 +23,12 @@ export const getUsers = async () => {
     console.log(err);
   }
 };
+
+export const putUser = async (user) => {
+  try {
+    const response = await axios.put("api/v1/users/" + user.id, user);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
